@@ -6,21 +6,19 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
+def read_excel(path):
+    df = pd.DataFrame()
+    with pd.ExcelFile(path) as xl:
+        for sheet_name in xl.sheet_names:
+            sheet_df = xl.parse(sheet_name)
+            df = pd.concat([df, sheet_df], ignore_index=True)
+    return df
+
 merger_path = 'src\\data\\mergers.xlsx'
-
-mergers = pd.DataFrame()
-with pd.ExcelFile(merger_path) as xls:
-    for sheet_name in xls.sheet_names:
-        sheet_df = xls.parse(sheet_name)
-        mergers = pd.concat([mergers, sheet_df], ignore_index=True)
-
 nonmerger_path = 'src\\data\\nonmergers.xlsx'
 
-nonmergers = pd.DataFrame()
-with pd.ExcelFile(nonmerger_path) as xls:
-    for sheet_name in xls.sheet_names:
-        sheet_df2 = xls.parse(sheet_name)
-        nonmergers = pd.concat([nonmergers, sheet_df2], ignore_index=True)
+mergers = read_excel(merger_path)
+nonmergers = read_excel(nonmerger_path)
 
 data = pd.concat([mergers, nonmergers], ignore_index=True)
 
