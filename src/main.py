@@ -14,6 +14,8 @@ def read_excel(path):
     return df
 
 def run_model(model, name, X_train, X_test, y_train, y_test):
+    # https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.fit
+    # this exists for basically every regression
     model.fit(X_train, y_train)
     
     y_pred = model.predict(X_test)
@@ -29,6 +31,15 @@ def run_model(model, name, X_train, X_test, y_train, y_test):
     plot_roc_curve(y_test, y_prob, name)
     
     plot_confusion_matrix(y_test, y_pred, name)
+    
+    if hasattr(model, 'coef_'):
+        # https://scikit-learn.org/stable/glossary.html#term-coef_
+        coefficients = model.coef_[0]
+    else:
+        # models without coef_
+        # https://scikit-learn.org/stable/glossary.html#term-feature_importances_
+        coefficients = model.feature_importances_
+    plot_feature_importance(coefficients, predictors, name)
     
     return None
 
@@ -71,6 +82,19 @@ def plot_confusion_matrix(y_true, y_pred, name):
     plt.title(f'Confusion Matrix: {name}')
     plt.xlabel('Predicted Labels')
     plt.ylabel('True Labels')
+    plt.show()
+    
+    return None
+
+def plot_feature_importance(coefficients, predictors, name):
+    coef_df = pd.DataFrame({'Variable': predictors, 'Coefficient': coefficients})
+    coef_df = coef_df.reindex(coef_df['Coefficient'].abs().sort_values(ascending=False).index)
+    
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x='Coefficient', y='Variable', data=coef_df, palette='coolwarm')
+    plt.title(f'Feature Importance - {name}')
+    plt.xlabel('Coefficient')
+    plt.ylabel('Variable')
     plt.show()
     
     return None
