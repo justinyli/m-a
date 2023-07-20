@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 merger_path = 'src\\data\\mergers.xlsx'
 
@@ -29,4 +30,14 @@ data = data.drop(columns=[
 ])
 data = data.dropna()
 
-print(data)
+
+predictors = data.columns.tolist()
+predictors.remove('Label')
+
+X = data[predictors]
+y = data['Label']
+
+# https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
+
+print(X_train)
