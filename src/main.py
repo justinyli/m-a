@@ -14,6 +14,18 @@ def read_excel(path):
             df = pd.concat([df, sheet_df], ignore_index=True)
     return df
 
+def calculate_metrics(y_true, y_pred):
+    # calculate accuracy
+    accuracy = accuracy_score(y_true, y_pred)
+
+    # find confusion matrix
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+
+    false_positive_rate = fp / (fp + tn)
+    false_negative_rate = fn / (fn + tp)
+
+    return accuracy, false_positive_rate, false_negative_rate
+
 merger_path = 'src\\data\\mergers.xlsx'
 nonmerger_path = 'src\\data\\nonmergers.xlsx'
 
@@ -21,7 +33,6 @@ mergers = read_excel(merger_path)
 nonmergers = read_excel(nonmerger_path)
 
 data = pd.concat([mergers, nonmergers], ignore_index=True)
-
 
 data = data.drop(columns=[
     'AD-3',
@@ -51,32 +62,5 @@ model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
 
-accuracy = accuracy_score(y_test, y_pred)
-print(accuracy)
-
-# ROC curve
-y_prob = model.predict_proba(X_test)[:, 1]
-fpr, tpr, thresholds = roc_curve(y_test, y_prob)
-roc_auc = roc_auc_score(y_test, y_prob)
-
-plt.figure(figsize=(8, 6))
-plt.plot(fpr, tpr, label=f'ROC curve (area = {roc_auc:.2f})')
-plt.plot([0, 1], [0, 1], 'k--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.0])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC Curve')
-plt.legend(loc='lower right')
-plt.show()
-
-conf_matrix = confusion_matrix(y_test, y_pred)
-print("Confusion Matrix:")
-print(conf_matrix)
-
-plt.figure(figsize=(8, 6))
-sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues")
-plt.xlabel('Predicted')
-plt.ylabel('True')
-plt.title('Confusion Matrix Heatmap')
-plt.show()
+acc, fp, fn = calculate_metrics(y_test, y_pred)
+print(acc, fp, fn)
