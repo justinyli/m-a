@@ -14,7 +14,7 @@ def read_excel(path):
             df = pd.concat([df, sheet_df], ignore_index=True)
     return df
 
-def run_model(model, name, X_train, X_test, y_train, y_test):
+def run_model(model, name, X_train, X_test, y_train, y_test, predictors):
     # https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.fit
     # this exists for basically every regression
     model.fit(X_train, y_train)
@@ -28,6 +28,7 @@ def run_model(model, name, X_train, X_test, y_train, y_test):
     print("False Negative Rate:", fn)
     
     # https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.predict_proba
+    # https://towardsdatascience.com/predict-vs-predict-proba-scikit-learn-bdc45daa5972#:~:text=The%20predict%20method%20is%20used,falls%20into%20the%20underlying%20classes).
     y_prob = model.predict_proba(X_test)[:, 1]
     plot_roc_curve(y_test, y_prob, name)
     
@@ -134,7 +135,7 @@ if __name__ == '__main__':
     # https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
     # model = LogisticRegression(max_iter=300)
 
-    # run_model(model, 'Logistic', X_train, X_test, y_train, y_test)
+    # run_model(model, 'Logistic', X_train, X_test, y_train, y_test, predictors)
 
 
     # Number of clusters to create
