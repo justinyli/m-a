@@ -6,6 +6,7 @@ import seaborn as sns
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import matplotlib.pyplot as plt
+import numpy as np
 
 def read_excel(path):
     df = pd.DataFrame()
