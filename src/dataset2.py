@@ -1,6 +1,19 @@
 from main import *
 
-def preprocess(data):
+def preprocess(data, ratio=None):
+    # undersampling: https://machinelearningmastery.com/undersampling-algorithms-for-imbalanced-classification/
+    if ratio:
+        mergers_data = data[data['is_acquired'] == True]
+        nonmergers_data = data[data['is_acquired'] == False]
+        
+        min_size = len(mergers_data)
+        
+        # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sample.html
+        nonmergers_data = nonmergers_data.sample(n=min_size*ratio)
+        
+        data = pd.concat([mergers_data, nonmergers_data], ignore_index=True)
+        
+    
     # https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html
     # https://datascience.stackexchange.com/questions/27957/why-do-we-need-to-discard-one-dummy-variable/27993#27993
     data = pd.get_dummies(data, columns=['category_code', 'country_code', 'state_code'], drop_first=True)
@@ -30,7 +43,7 @@ if __name__ == '__main__':
         'other_degree',
     ])
     
-    data = preprocess(data)
+    data = preprocess(data, 1)
     
     na_count_per_row = data.isna().sum(axis=1)
     # Total number of rows with NaN values
