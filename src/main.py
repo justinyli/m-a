@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_curve, roc_auc_score, confusion_matrix
 import seaborn as sns
 from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import matplotlib.pyplot as plt
 
 def read_excel(path):
