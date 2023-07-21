@@ -52,6 +52,10 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
     
     # https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
-    model = RandomForestClassifier()
+    # model = LogisticRegression(max_iter = 300)
+    # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+    # model = RandomForestClassifier()
+    # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html#sklearn-ensemble-gradientboostingclassifier
+    model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3)
 
     run_model(model, 'Logistic', X_train, X_test, y_train, y_test, predictors)
