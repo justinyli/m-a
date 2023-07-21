@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_curve, roc_auc_score, confusion_matrix
 import seaborn as sns
+from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
 def read_excel(path):
@@ -99,36 +100,65 @@ def plot_feature_importance(coefficients, predictors, name):
     
     return None
 
-merger_path = 'src\\data\\mergers.xlsx'
-nonmerger_path = 'src\\data\\nonmergers.xlsx'
 
-mergers = read_excel(merger_path)
-nonmergers = read_excel(nonmerger_path)
+if __name__ == '__main__':
+    merger_path = 'src\\data\\mergers.xlsx'
+    nonmerger_path = 'src\\data\\nonmergers.xlsx'
 
-data = pd.concat([mergers, nonmergers], ignore_index=True)
+    mergers = read_excel(merger_path)
+    nonmergers = read_excel(nonmerger_path)
 
-data = data.drop(columns=[
-    'AD-3',
-    'AD-2',
-    'AD-1',
-    'AD-30',
-    'Announcement Date',
-    'Company RIC'
-])
-data = data.dropna()
+    data = pd.concat([mergers, nonmergers], ignore_index=True)
 
-
-predictors = data.columns.tolist()
-predictors.remove('Label')
-
-X = data[predictors]
-y = data['Label']
-
-# https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
+    data = data.drop(columns=[
+        'AD-3',
+        'AD-2',
+        'AD-1',
+        'AD-30',
+        'Announcement Date',
+        'Company RIC'
+    ])
+    data = data.dropna()
 
 
-# https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
-model = LogisticRegression(max_iter=300)
+    predictors = data.columns.tolist()
+    predictors.remove('Label')
 
-run_model(model, 'Logistic', X_train, X_test, y_train, y_test)
+    X = data[predictors]
+    y = data['Label']
+
+    # https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
+
+
+    # https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+    # model = LogisticRegression(max_iter=300)
+
+    # run_model(model, 'Logistic', X_train, X_test, y_train, y_test)
+
+
+    # Number of clusters to create
+    num_clusters = 2
+
+    # Apply k-means clustering
+    kmeans = KMeans(n_clusters=num_clusters, random_state=None)
+    data['Cluster'] = kmeans.fit_predict(X)
+
+    # Train logistic regression model for each cluster
+    for cluster_id in range(num_clusters):
+        cluster_data = data[data['Cluster'] == cluster_id].drop(columns='Cluster')
+        X_train, X_test, y_train, y_test = train_test_split(cluster_data[predictors], cluster_data['Label'], test_size=0.2, random_state=None)
+
+        model = LogisticRegression(max_iter=300)
+        model.fit(X_train, y_train)
+
+        y_pred = model.predict(X_test)
+
+        # Calculate metrics for each cluster
+        accuracy, false_positive_rate, false_negative_rate = calculate_metrics(y_test, y_pred)
+
+        print(f"Cluster {cluster_id}:")
+        print("Accuracy:", accuracy)
+        print("False Positive Rate:", false_positive_rate)
+        print("False Negative Rate:", false_negative_rate)
+        plot_roc_curve(y_test, y_pred, f'Cluster {cluster_id}:')
