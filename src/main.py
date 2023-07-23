@@ -131,37 +131,39 @@ if __name__ == '__main__':
     y = data['Label']
 
     # https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
 
 
     # https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
     # model = LogisticRegression(max_iter=300)
+    
+    model = GradientBoostingClassifier()
 
-    # run_model(model, 'Logistic', X_train, X_test, y_train, y_test, predictors)
+    run_model(model, 'Gradient Boosting', X_train, X_test, y_train, y_test, predictors)
 
 
-    # Number of clusters to create
-    num_clusters = 2
+    # # Number of clusters to create
+    # num_clusters = 2
 
-    # Apply k-means clustering
-    kmeans = KMeans(n_clusters=num_clusters, random_state=None)
-    data['Cluster'] = kmeans.fit_predict(X)
+    # # Apply k-means clustering
+    # kmeans = KMeans(n_clusters=num_clusters, random_state=None)
+    # data['Cluster'] = kmeans.fit_predict(X)
 
-    # Train logistic regression model for each cluster
-    for cluster_id in range(num_clusters):
-        cluster_data = data[data['Cluster'] == cluster_id].drop(columns='Cluster')
-        X_train, X_test, y_train, y_test = train_test_split(cluster_data[predictors], cluster_data['Label'], test_size=0.2, random_state=None)
+    # # Train logistic regression model for each cluster
+    # for cluster_id in range(num_clusters):
+    #     cluster_data = data[data['Cluster'] == cluster_id].drop(columns='Cluster')
+    #     X_train, X_test, y_train, y_test = train_test_split(cluster_data[predictors], cluster_data['Label'], test_size=0.2, random_state=None)
 
-        model = LogisticRegression(max_iter=300)
-        model.fit(X_train, y_train)
+    #     model = LogisticRegression(max_iter=300)
+    #     model.fit(X_train, y_train)
 
-        y_pred = model.predict(X_test)
+    #     y_pred = model.predict(X_test)
 
-        # Calculate metrics for each cluster
-        accuracy, false_positive_rate, false_negative_rate = calculate_metrics(y_test, y_pred)
+    #     # Calculate metrics for each cluster
+    #     accuracy, false_positive_rate, false_negative_rate = calculate_metrics(y_test, y_pred)
 
-        print(f'Cluster {cluster_id}:')
-        print('Accuracy:', accuracy)
-        print('False Positive Rate:', false_positive_rate)
-        print('False Negative Rate:', false_negative_rate)
-        plot_roc_curve(y_test, y_pred, f'Cluster {cluster_id}:')
+    #     print(f'Cluster {cluster_id}:')
+    #     print('Accuracy:', accuracy)
+    #     print('False Positive Rate:', false_positive_rate)
+    #     print('False Negative Rate:', false_negative_rate)
+    #     plot_roc_curve(y_test, y_pred, f'Cluster {cluster_id}:')
