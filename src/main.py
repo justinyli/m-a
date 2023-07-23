@@ -24,10 +24,10 @@ def run_model(model, name, X_train, X_test, y_train, y_test, predictors):
     y_pred = model.predict(X_test)
     
     acc, fp, fn = calculate_metrics(y_test, y_pred)
-    print(f"Model: {name}")
-    print("Accuracy:", acc)
-    print("False Positive Rate:", fp)
-    print("False Negative Rate:", fn)
+    print(f'Model: {name}')
+    print('Accuracy:', acc)
+    print('False Positive Rate:', fp)
+    print('False Negative Rate:', fn)
     
     # https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.predict_proba
     # https://towardsdatascience.com/predict-vs-predict-proba-scikit-learn-bdc45daa5972#:~:text=The%20predict%20method%20is%20used,falls%20into%20the%20underlying%20classes).
@@ -160,8 +160,8 @@ if __name__ == '__main__':
         # Calculate metrics for each cluster
         accuracy, false_positive_rate, false_negative_rate = calculate_metrics(y_test, y_pred)
 
-        print(f"Cluster {cluster_id}:")
-        print("Accuracy:", accuracy)
-        print("False Positive Rate:", false_positive_rate)
-        print("False Negative Rate:", false_negative_rate)
+        print(f'Cluster {cluster_id}:')
+        print('Accuracy:', accuracy)
+        print('False Positive Rate:', false_positive_rate)
+        print('False Negative Rate:', false_negative_rate)
         plot_roc_curve(y_test, y_pred, f'Cluster {cluster_id}:')
