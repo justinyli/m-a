@@ -45,6 +45,8 @@ After doing some research and inspecting my data set, I realized that the data w
 
 ![Confusion matrix](img/2_confusion.png)
 
+Notably, this model has an 84% accuracy in finding mergers and 69% accuracy in finding nonmergers.
+
 ![ROC curve](img/2_ROC.png)
 
 ![Predictors](img/2_features.png)
