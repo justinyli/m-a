@@ -14,7 +14,7 @@ First, using a logistic regression, this model typically achieves an accuracy of
 The ROC curve is the following:
 ![ROC curve](img/1_logisticROC.png)
 
-Finalyl, we have the most important predictors:
+Finally, we have the most important predictors:
 ![Predictors](img/1_logisticfeatures.png)
 
 Net cash flow from operating activities, with its negative coefficient, emerges as the ultimate diviner of M&A intentions. After all, it makes sense for cash-hungry companies to entertain the prospect of merging or being acquired.
@@ -70,6 +70,6 @@ I'd like to add a time series components to this project, evaluating how the sto
 
 Install the necessary dependencies from [here](src/requirements.txt) and dig into the M&A world.
 
-# Real-world Applications
+# Applications
 
 Despite the current limitations, the theoretical concept of this project holds practical implications for investors/financial analysts. By providing insights into factors that influence M&A decisions, the models can serve as indicators for potential M&A deals. Hopefully, by continuing to refine these models and involving more data, M&A deals can be quickly foreseen.
