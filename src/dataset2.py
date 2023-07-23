@@ -44,7 +44,7 @@ if __name__ == '__main__':
         'other_degree',
     ])
     
-    data = preprocess(data, 1.0)
+    data = preprocess(data, 1)
     
     na_count_per_row = data.isna().sum(axis=1)
     # Total number of rows with NaN values
@@ -66,10 +66,10 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=None)
     
     # https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
-    model = LogisticRegression(max_iter = 300)
+    # model = LogisticRegression(max_iter = 200)
     # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
     # model = RandomForestClassifier()
     # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html#sklearn-ensemble-gradientboostingclassifier
-    # model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3)
+    model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3)
 
     run_model(model, 'Gradient Boosting', X_train, X_test, y_train, y_test, predictors)
